@@ -34,17 +34,16 @@
 #define SHIFT_REG_CLOCK_PIN (1)
 
 #define VIBRATION_SWITCH_PIN (2)
-#define RANDOM_SEED_ANALOG_INPUT (A1)
 
 #define DICE_MAX_SIDE_NB    (6)
 
 uint8_t diceSides[DICE_MAX_SIDE_NB] = {
-  0B1,
-  0B11000,
-  0B11001,
-  0B1011010,
-  0B1011011,
-  0B1111110
+  0B1000000,
+  0B0001100,
+  0B1001100,
+  0B0101101,
+  0B1101101,
+  0B0111111
 };
 
 ISR(PCINT0_vect)
@@ -86,13 +85,13 @@ void diceRoll()
     delay(10);
   }
 
-  int rollValue = analogRead(RANDOM_SEED_ANALOG_INPUT);
+  // int rollValue = analogRead(RANDOM_SEED_ANALOG_INPUT);
 
-  rollValue %= DICE_MAX_SIDE_NB;
+  int rollValue = rand() % DICE_MAX_SIDE_NB;
 
   registerValue = diceSides[rollValue];
 
-  updateShiftRegister(registerValue);
+  updateShiftRegister(registerValue); 
   delay(200);
 }
 
