@@ -116,8 +116,12 @@ void setup()
   PCMSK |= _BV(PCINT2);
   sei();
 
+  ADCSRA &= ~_BV(ADEN); // Turn ADC off, saves ~230uA (flip that bit to turn it back on)
+
+  updateShiftRegister(0);
+
   // sleep setup
-  sleep_enable();
+
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 }
 
@@ -132,15 +136,12 @@ void loop()
   PORTB &= ~(1 << SHIFT_REG_LATCH_PIN);
   PORTB &= ~(1 << SHIFT_REG_DATA_PIN);
 
-  ADCSRA &= ~_BV(ADEN); // Turn ADC off, saves ~230uA
+  sleep_enable();
   sleep_cpu();
-  ADCSRA |= _BV(ADEN); // Turn ADC back on
 
 
   diceRoll();
 
   updateShiftRegister(0);
-
-  sleep_cpu();
 
 }
